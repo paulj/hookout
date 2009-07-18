@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+# Hookout command line interface script.
+# Run <tt>hookout -h</tt> to get more usage.
+require 'rubygems'
+require File.dirname(__FILE__) + '/../lib/hookout'
+
+Hookout::Runner.new(ARGV).run!

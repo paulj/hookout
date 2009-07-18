@@ -1,0 +1,6 @@
+rdoc
+pkg
+log
+tmp
+*.tmproj
+.DS_Store

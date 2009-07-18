@@ -1,0 +1,55 @@
+= Hookout - Reverse HTTP Webhooks
+Developing webhook based applications from behind a firewall or NAT provides many challenges. The
+biggest is allowing external applications to see your hook. Hookout allows you to use a 
+ReverseHTTP (http://www.reversehttp.net) server to expose your application to the outside world, without needing
+to configure any complicated firewall holes.
+
+== Getting Started
+=== Installing
+Hookout can be installed via RubyGems with:
+  gem sources -a http://gems.github.com
+  gem install paulj-hookout
+
+It can also be installed manually with:
+  git clone git://github.com/paulj/hookout.git
+  cd hookout
+  rake build install
+
+=== Running an application
+Hookout provides a Rack (http://rack.rubyforge.org) adapter, allowing any standard Rack application to
+be made available. This document will cover getting a Sinatra application running with Hookout.
+
+Firstly, say we have a simple sinatra application:
+  require 'rubygems'
+  require 'sinatra'
+  
+  get '/' do
+    "Hello World"
+  end
+
+To run this application under hookout, you could change it to the following:
+  require 'rubygems'
+  require 'sinatra'
+  require 'hookout'
+  
+  set :server, 'hookout'
+  set :host, 'http://www.reversehttp.net/reversehttp'
+  set :port, 'test-ruby-app'
+
+  get '/' do
+    "Hello World"
+  end
+
+This instructs Sinatra to start Hookout as the Rack adapter; and informs hookout that it should use
+the public http://www.reversehttp.net server; and informs hookout that it should request the
+"test-ruby-app" space on that server for this application. (Note: To prevent problems, it is HIGHLY
+recommended to change this to something more unique before trying this!).
+
+You can now run the application with:
+  ruby test-app.rb
+
+You should see it startup with something like:
+  == Sinatra/0.9.2 has taken the stage on test-ruby-app for development with backup from Hookout
+  Location changed to http://test-ruby-app.www.reversehttp.net/
+
+You can now visit http://test-ruby-app.www.reversehttp.net, and see you own Sinatra app serving pages!
