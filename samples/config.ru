@@ -1,5 +1,4 @@
 require 'simple-app'
-require 'hookout'
 
 set :run, false
 

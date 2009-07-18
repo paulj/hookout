@@ -15,11 +15,12 @@ It can also be installed manually with:
   cd hookout
   rake build install
 
-=== Running an application
+=== Running an application via the hookout helper
 Hookout provides a Rack (http://rack.rubyforge.org) adapter, allowing any standard Rack application to
-be made available. This document will cover getting a Sinatra application running with Hookout.
+be made available. It also bundles a script called hookout that will start up an instance of Thin using
+ReverseHTTP as a backend. This section will cover running a simple Sinatra application with the hookout helper.
 
-Firstly, say we have a simple sinatra application:
+Firstly, say we have a simple Sinatra application (called simple-app.rb):
   require 'rubygems'
   require 'sinatra'
   
@@ -27,14 +28,32 @@ Firstly, say we have a simple sinatra application:
     "Hello World"
   end
 
-To run this application under hookout, you could change it to the following:
+To run with the hookout adapter, you'll need a simple rackup configuration file. Create a config.ru such as:
+  require 'simple-app'
+  
+  set :run, false
+
+  run Sinatra::Application
+
+From the command line, you can now start this application with a command line such as:
+  hookout -a http://www.reversehttp.net/reversehttp -n simple-ruby-app -R config.ru start
+Thin should boot, and provide output such as:
+  >> Thin web server (v1.0.0 codename That's What She Said)
+  >> Maximum connections set to 1024
+  >> Listening on simple-ruby-app via http://www.reversehttp.net/reversehttp, CTRL+C to stop
+  Bound to location http://simple-ruby-app.www.reversehttp.net/
+
+You can now visit http://simple-ruby-app.www.reversehttp.net to see you application.
+
+=== Configuring Sinatra to use Hookout as the default server
+To make a Sintatra application run Hookout instead of thin, a simple script such as the following can be used:
   require 'rubygems'
   require 'sinatra'
   require 'hookout'
   
   set :server, 'hookout'
   set :host, 'http://www.reversehttp.net/reversehttp'
-  set :port, 'test-ruby-app'
+  set :port, 'standalone-ruby-app'
 
   get '/' do
     "Hello World"
@@ -42,7 +61,7 @@ To run this application under hookout, you could change it to the following:
 
 This instructs Sinatra to start Hookout as the Rack adapter; and informs hookout that it should use
 the public http://www.reversehttp.net server; and informs hookout that it should request the
-"test-ruby-app" space on that server for this application. (Note: To prevent problems, it is HIGHLY
+"standalone-ruby-app" space on that server for this application. (Note: To prevent problems, it is HIGHLY
 recommended to change this to something more unique before trying this!).
 
 You can now run the application with:
