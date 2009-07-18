@@ -69,6 +69,6 @@ You can now run the application with:
 
 You should see it startup with something like:
   == Sinatra/0.9.2 has taken the stage on test-ruby-app for development with backup from Hookout
-  Location changed to http://test-ruby-app.www.reversehttp.net/
+  Location changed to http://standalone-ruby-app.www.reversehttp.net/
 
-You can now visit http://test-ruby-app.www.reversehttp.net, and see you own Sinatra app serving pages!
+You can now visit http://standalone-ruby-app.www.reversehttp.net, and see you own Sinatra app serving pages!
