@@ -38,7 +38,6 @@ module Hookout
       initialize_connection(connection)
       
       connection.receive_data(request.body)
-      connection.process
     end
   end
   
