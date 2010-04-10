@@ -49,6 +49,10 @@ module Hookout
       false
     end
     
+    def comm_inactivity_timeout=(timeout)
+      # Ignore
+    end
+    
     def send_data(data)
       @rhttp_req.write(data)
     end
